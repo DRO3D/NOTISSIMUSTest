@@ -1,0 +1,86 @@
+﻿@{
+    @model NOTISSIMUSTest.Models.ArrayJSONInput
+    ViewData["Title"] = "Home Page";
+}
+<script>
+
+    window.onload = () => {
+        takeMyMouse();
+    }
+
+    let t = new Date();
+    let x = 0;
+    let y = 0;
+    
+    const data = [];
+    const myPics = document;
+    const context = myPics.getContext("2d");
+    
+
+
+
+    function mousemove(x, y, t){
+        document.getElementsByTagName("p")[0].textContent =  'positionX: ' + x + ' positionY: ' + y + ' | Now time is: ' + t.getFullYear() + '.' + (t.getMonth()+1) + '.' + t.getDate()
+        + ' ' + t.getHours() + ':' + t.getMinutes() + ':' + t.getSeconds() + ':' + t.getMilliseconds();
+
+        }
+
+    function takeMyMouse(){
+        myPics.addEventListener("mousemove", (e) => {
+            mousemove(x,y,t);
+            takeMyData();
+            x = e.pageX;
+            y = e.pageY;
+            t = new Date();
+        });
+    }
+
+    function takeMyData(){
+        let Time = t.getFullYear() + '.' + (t.getMonth()+1) + '.' + t.getDate()
+        + ' ' + t.getHours() + ':' + t.getMinutes() + ':' + t.getSeconds() + ':' + t.getMilliseconds();
+
+        data.push (
+            {
+                "X": x,
+                "Y": y,
+                "T": Time
+            }
+        );
+    }
+
+    function sendMyData(){
+        let oleg = "";
+        /*
+        oleg+="["
+        for(let i = 0; i < data.length; i++ ){
+            
+            oleg += JSON.stringify(data[i]);
+            if(i+1 != data.length){
+            oleg += ",";
+            }
+        }
+        oleg+="]"*/
+
+        oleg+= JSON.stringify(data);
+
+        var obj = document.getElementsByTagName("form")[0];
+        obj.Data.value = oleg;
+        alert( data.length + "\n" + oleg);
+        data.length = 0;
+
+        
+    }
+
+</script>
+
+
+<div class="text-center" style="padding-top:100px">
+    <form asp-action="GetDataforDB">
+        <input name="Data" type="text" asp-for="Data" value="Poggers" />
+        <input type="submit" onclick="sendMyData()" value="Отправить данные" />
+        
+    </form>
+    <p id="d">Oleg</p>
+    
+    
+</div>
